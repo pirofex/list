@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Todo-List</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+		</noscript>
+	</head>
+	<body>
+		<div id="header-wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="12u">	
+						<header id="header">
+							<h1><a href="#" id="logo">List</a></h1>
+						</header>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="main">
+			<div class="container">
+				<div class="row main-row">
+					<div class="12u">
+						<section>
+                            <div id="list">
+                            
+                            </div>
+                            <input style="height: 40px; border-radius: 5px; font-size: 18px;" type="text" id="description"/>
+                            <button  id="add"  class="button" value="Add"/>
+				            <div id="message"></div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+        <script>            
+            $.ajax({
+                url: "/ajax/getentries",
+                data: {},
+                success: function(data) {
+                    var json = jQuery.parseJSON(data);
+                    for (i in json)
+                    {
+                        $("#list").after("<p>" + json[i].description + "</p>");
+                    }
+                }
+            }); 
+            
+            $('#add').click(function() {
+                var t = $('#description').val();
+                $.ajax({
+                  url: "/ajax/addentry",
+                  data: { description: t },
+                  success: function( data ) {
+                    $("#message").after("Dein Eintrag wurde hinzugefügt!");
+                  }
+                }); 
+            });
+        </script>
+	</body>
+</html>
