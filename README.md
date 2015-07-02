@@ -204,4 +204,38 @@ int main()
 }
 ```
 
-Und das war's dann auch schon. Viel Spaß damit!
+Und das war's dann auch schon mit dem Server-seitigen.
+
+## Die Client Applikation
+Hier benutzen wir einfach ein einfaches HTML-Template und jQuery um die Ajax-Requests abzusetzen.
+
+```
+<script>            
+    $.ajax({
+        url: "/ajax/getentries",
+        data: {},
+        success: function(data) {
+            var json = jQuery.parseJSON(data);
+            for (i in json)
+            {
+                $("#list").after("<p>" + json[i].description + "</p>");
+            }
+        }
+    }); 
+    
+    $('#add').click(function() {
+        var t = $('#description').val();
+        $.ajax({
+          url: "/ajax/addentry",
+          data: { description: t },
+          success: function( data ) {
+            $("#message").after("Dein Eintrag wurde hinzugefügt!");
+          }
+        }); 
+    });
+</script>
+```
+
+Mit der ersten Funktion senden wir einen Ajax-Request an die URL an welcher unser Controller "arbeitet". Das zurückgegebene JSON parsen wir und fügen mit Javascript die einzelnen Listeneinträge in unsere Seite ein.
+
+Mit der zweiten Funktion fangen wir Klicks auf unseren "Add"-Button ab und senden anschließend einen Ajax-Request an den anderen Controller, welcher Einträge hinzufügt. Wenn wir anschließend die Seite aktualisieren kann man den gerade angelegten neuen Eintrag auch sehen.
